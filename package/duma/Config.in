@@ -14,7 +14,7 @@ config BR2_PACKAGE_DUMA
 	  Electric Fence library. Detects buffer overflow and
 	  underflow, and also memory leaks.
 
-	  https://github.com/johnsonjh/duma
+	  http://duma.sourceforge.net
 
 if BR2_PACKAGE_DUMA
 

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -z "$1" ]
+  then
+    echo "No arguments supplied!"
+    echo "Pass path to device_e0f3.pem as first argument to this script"
+    exit 1
+fi
+
+echo "-----> Write certificate into OID 0xe0f3"
+
+/usr/sbin/trustm_cert -w 0xe0e3 -i $1

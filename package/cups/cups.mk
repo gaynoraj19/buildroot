@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CUPS_VERSION = 2.4.7
+CUPS_VERSION = 2.4.6
 CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
 CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
 CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
@@ -37,8 +37,10 @@ CUPS_DEPENDENCIES = \
 
 ifeq ($(BR2_PACKAGE_SYSTEMD),y)
 CUPS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system \
-	--with-ondemand=systemd
+	--enable-systemd
 CUPS_DEPENDENCIES += systemd
+else
+CUPS_CONF_OPTS += --disable-systemd
 endif
 
 ifeq ($(BR2_PACKAGE_DBUS),y)
@@ -49,11 +51,8 @@ CUPS_CONF_OPTS += --disable-dbus
 endif
 
 ifeq ($(BR2_PACKAGE_GNUTLS),y)
-CUPS_CONF_OPTS += --with-tls=gnutls
+CUPS_CONF_OPTS += --with-tls=yes
 CUPS_DEPENDENCIES += gnutls
-else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-CUPS_CONF_OPTS += --with-tls=openssl
-CUPS_DEPENDENCIES += openssl
 else
 CUPS_CONF_OPTS += --with-tls=no
 endif
@@ -65,11 +64,11 @@ else
 CUPS_CONF_OPTS += --disable-libusb
 endif
 
-ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
+ifeq ($(BR2_PACKAGE_AVAHI),y)
 CUPS_DEPENDENCIES += avahi
-CUPS_CONF_OPTS += --with-dnssd=avahi
+CUPS_CONF_OPTS += --enable-avahi
 else
-CUPS_CONF_OPTS += --with-dnssd=no
+CUPS_CONF_OPTS += --disable-avahi
 endif
 
 ifeq ($(BR2_PACKAGE_HAS_UDEV),y)

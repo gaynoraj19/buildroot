@@ -1,0 +1,16 @@
+config BR2_PACKAGE_LINUX_OPTIGA_TRUST_M
+	bool "linux-optiga-trust-m"
+	select BR2_PACKAGE_LIBUSB
+	select BR2_PACKAGE_LIBGPIOD
+	select BR2_PACKAGE_CRYPTODEV
+	select BR2_PACKAGE_OPENSSL
+	
+	help
+	  Optiga trust m support.
+
+	  https://github.com/sabantoag/linux-optiga-trust-m
+
+
+comment "linux-optiga-trust-m needs a toolchain w/ C++, NPTL and wchar"
+	depends on !BR2_INSTALL_LIBSTDCPP || \
+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR

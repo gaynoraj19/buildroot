@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBBLOCKDEV_VERSION = 3.1.0
+LIBBLOCKDEV_VERSION = 2.26
 LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
 LIBBLOCKDEV_LICENSE = LGPL-2.1
 LIBBLOCKDEV_LICENSE_FILES = LICENSE
@@ -16,25 +16,30 @@ LIBBLOCKDEV_AUTORECONF = YES
 LIBBLOCKDEV_CONF_OPTS = \
 	--disable-introspection \
 	--with-loop \
+	--without-bcache \
 	--without-btrfs \
 	--without-dm \
+	--without-dmraid \
 	--without-escrow \
+	--without-kbd \
 	--without-lvm_dbus \
 	--without-mpath \
 	--without-nvdimm \
+	--without-python2 \
 	--without-python3 \
 	--without-s390 \
-	--without-tools
+	--without-tools \
+	--without-vdo
 
 ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
-LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
+LIBBLOCKDEV_DEPENDENCIES += cryptsetup
 LIBBLOCKDEV_CONF_OPTS += --with-crypto
 else
 LIBBLOCKDEV_CONF_OPTS += --without-crypto
 endif
 
 ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_FS),y)
-LIBBLOCKDEV_DEPENDENCIES += e2fsprogs parted util-linux
+LIBBLOCKDEV_DEPENDENCIES += parted util-linux
 LIBBLOCKDEV_CONF_OPTS += --with-fs
 else
 LIBBLOCKDEV_CONF_OPTS += --without-fs
@@ -61,7 +66,7 @@ LIBBLOCKDEV_CONF_OPTS += --without-mdraid
 endif
 
 ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_PART),y)
-LIBBLOCKDEV_DEPENDENCIES += parted util-linux
+LIBBLOCKDEV_DEPENDENCIES += parted
 LIBBLOCKDEV_CONF_OPTS += --with-part
 else
 LIBBLOCKDEV_CONF_OPTS += --without-part
@@ -72,13 +77,6 @@ LIBBLOCKDEV_DEPENDENCIES += util-linux
 LIBBLOCKDEV_CONF_OPTS += --with-swap
 else
 LIBBLOCKDEV_CONF_OPTS += --without-swap
-endif
-
-ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_NVME),y)
-LIBBLOCKDEV_DEPENDENCIES += libnvme
-LIBBLOCKDEV_CONF_OPTS += --with-nvme
-else
-LIBBLOCKDEV_CONF_OPTS += --without-nvme
 endif
 
 $(eval $(autotools-package))

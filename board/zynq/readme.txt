@@ -1,8 +1,7 @@
 This is the Buildroot support for Zynq boards.  Zynq boards are available from
 Xilinx and some third party vendors, but the build procedure is very similar.
 
-Currently, four boards are natively supported by Buildroot:
- - Xilinx ZC702 board (zynq_zc702_defconfig)
+Currently, three boards are natively supported by Buildroot:
  - Xilinx ZC706 board (zynq_zc706_defconfig)
  - Avnet ZedBoard (zynq_zed_defconfig)
  - Avnet MicroZed (zynq_microzed_defconfig)
@@ -10,7 +9,6 @@ Currently, four boards are natively supported by Buildroot:
 Steps to create a working system for a Zynq board:
 
 1) Configuration (do one of the following)
-    make zynq_zc702_defconfig     (ZC702)
     make zynq_zc706_defconfig     (ZC706)
     make zynq_zed_defconfig       (Zedboard)
     make zynq_microzed_defconfig  (MicroZed)
@@ -33,11 +31,12 @@ kernel_image=myimage
 modeboot=myboot
 myboot=...
 
-References:
- - ZC702 information including schematics, reference designs, and manuals are
-   available from
-   https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
+Note:
+The DTB for MicroZed is the same as the one for the Zedboard (zynq-zed.dtb),
+and this is the recommended solution, see
+https://forums.xilinx.com/t5/Embedded-Linux/Microzed-default-device-tree-dts/td-p/432856.
 
+References:
  - ZC706 information including schematics, reference designs, and manuals are
    available from
    http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
@@ -53,7 +52,7 @@ the upstream kernel and U-Boot, you simply need to change the
 following Buildroot options:
 
  - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
- - U-Boot (BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=<dts file name>")
+ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
 
 Custom ps7_init_gpl.c/h support:
 

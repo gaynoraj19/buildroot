@@ -1,0 +1,25 @@
+[all]
+kernel=kernel8.img
+initramfs rootfs.cpio.zst
+enable_uart=1
+uart_2ndstage=1
+disable_overscan=1
+dtoverlay=dwc2,dr_mode=peripheral
+start_file=start4.elf
+fixup_file=fixup4.dat
+# I2C
+# Enable i2c 0
+dtparam=i2c_vc=on
+# Enable i2c 1
+dtparam=i2c_arm=on
+# Set baudrate to 400 kHz
+dtparam=i2c_arm_baudrate=400000
+
+[pi5]
+# Limit clock frequencies because this is likely to be powered 
+# via USB-3 port
+arm_freq=1000
+gpu_freq=500
+
+[none]
+

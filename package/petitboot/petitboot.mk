@@ -4,21 +4,13 @@
 #
 ################################################################################
 
-PETITBOOT_VERSION = 1.14
+PETITBOOT_VERSION = 1.13
 PETITBOOT_SOURCE = petitboot-v$(PETITBOOT_VERSION).tar.gz
 PETITBOOT_SITE = https://github.com/open-power/petitboot/releases/download/v$(PETITBOOT_VERSION)
-PETITBOOT_DEPENDENCIES = \
-	elfutils \
-	ncurses \
-	udev \
-	host-bison \
-	host-flex \
-	lvm2 \
-	$(TARGET_NLS_DEPENDENCIES)
+PETITBOOT_DEPENDENCIES = elfutils ncurses udev host-bison host-flex lvm2
 PETITBOOT_LICENSE = GPL-2.0
 PETITBOOT_LICENSE_FILES = COPYING
 
-PETITBOOT_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
 PETITBOOT_CONF_OPTS = \
 	--enable-crypt \
 	--enable-platform-auto \
@@ -54,8 +46,6 @@ else
 PETITBOOT_CONF_OPTS += --without-fdt
 endif
 
-PETITBOOT_GETTY_PORT = $(patsubst %,'%',$(call qstrip,$(BR2_PACKAGE_PETITBOOT_GETTY_PORT)))
-
 define PETITBOOT_POST_INSTALL
 	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
 		$(TARGET_DIR)/usr/libexec/petitboot/bb-kexec-reboot
@@ -65,14 +55,6 @@ define PETITBOOT_POST_INSTALL
 		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
 	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
 		$(TARGET_DIR)/etc/init.d/S15pb-discover
-	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/pb-console \
-		$(TARGET_DIR)/etc/init.d/pb-console
-
-	mkdir -p $(TARGET_DIR)/etc/udev/rules.d
-	(for port in $(PETITBOOT_GETTY_PORT); do \
-		printf 'SUBSYSTEM=="tty", KERNEL=="%s", RUN+="/etc/init.d/pb-console start $$name"\n' "$$port"; \
-	done) > $(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
-
 	mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
 	ln -sf /usr/sbin/pb-udhcpc \
 		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/

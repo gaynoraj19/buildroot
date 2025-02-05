@@ -1,0 +1,20 @@
+#!/bin/sh
+# Create a CSR on the device
+DEVICEID=$1
+
+if [ -z "$1" ]
+  then
+    echo "No arguments supplied!"
+    echo "Pass device ID as first argument to this script"
+    exit 1
+fi
+
+echo $DEVICEID
+echo "Generate csr for device using trustm Engine and ECC256"
+#~ openssl req -keyform engine -engine trustm_engine -key 0xe0f3:*:NEW:0x03:0x13 -ne#w -out device_e0f3.csr -verify 
+openssl req -keyform engine -engine trustm_engine -key 0xe0f3:^:NEW:0x03:0x13 -ne#w -out device_e0f3.csr -subj /CN=$DEVICEID
+# RSA does not work
+### openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privateKey.key
+##openssl req -keyform engine -engine trustm_engine -key 0xe0f3  --new -newkey rsa:2048 -out device_e0f3.csr -subj /CN=$DEVICEID
+echo "Verify csr"
+openssl req -text -noout -verify -in device_e0f3.csr

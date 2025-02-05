@@ -2,29 +2,21 @@
 Xilinx Kria SOM Starter Kits - ZynqMP SoC
 **************************************************
 
-This document describes the Buildroot support for the Kria KD240,
-KR260 and KV260 starter kits by Xilinx, based on Kria SOM including the
+This document describes the Buildroot support for the Kria 
+KV260 starter kit by Xilinx, based on Kria SOM including the 
 Zynq UltraScale+ MPSoC (aka ZynqMP).  It has been tested with 
-the KD240, KR260 and KV260 production boards.
+the KV260 production board.
 
-Evaluation board features can be found here with the links below.
-
-KD240:
-https://www.xilinx.com/products/som/kria/kd240-drives-starter-kit.html
-
-KR260:
-https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
+Evaluation board features can be found here with the link below.
 
 KV260:
-https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html
+https://www.xilinx.com/products/boards-and-kits/kv260.html
 
 How to build it
 ===============
 
-Configure Buildroot: (use the command for the specific board)
+Configure Buildroot:
 
-    $ make zynqmp_kria_kd240_defconfig
-    $ make zynqmp_kria_kr260_defconfig
     $ make zynqmp_kria_kv260_defconfig
 
 Compile everything and build the rootfs image:
@@ -73,7 +65,7 @@ in that the boot.bin and u-boot.itb files need to be flashed
 into the QSPI boot flash such that U-Boot can then load all
 of the remaining images from the SD card.
 
-In addition, the Kria Starter Kits QSPI comes pre-flashed with
+In addition, the KV260 Starter Kit QSPI comes pre-flashed with
 a utility designed to make updating the QSPI flash memory
 easier.
 
@@ -84,9 +76,8 @@ https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Bo
 
 Additionally, it is possible to use u-boot for updating the
 QSPI with new boot.bin and u-boot.itb images with the u-boot
-commands below.
+commands below:
 
-KV260 Flashing Instructions:
 Flashing u-boot.itb:
     $ sf probe
     $ fatload mmc 1 0x1000000 u-boot.itb
@@ -96,19 +87,6 @@ Flashing u-boot.itb:
 Flashing boot.bin:
     $ sf probe
     $ fatload mmc 1 0x1000000 boot.bin
-    $ sf erase 0x200000 +$filesize
-    $ sf write 0x1000000 0x200000 $filesize
-
-KD240 / KR260 Flashing Instructions:
-Flashing u-boot.itb:
-    $ sf probe
-    $ fatload usb 0 0x1000000 u-boot.itb
-    $ sf erase 0xf80000 +$filesize
-    $ sf write 0x1000000 0xf80000 $filesize
-
-Flashing boot.bin:
-    $ sf probe
-    $ fatload usb 0 0x1000000 boot.bin
     $ sf erase 0x200000 +$filesize
     $ sf write 0x1000000 0x200000 $filesize
 

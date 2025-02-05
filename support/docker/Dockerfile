@@ -44,7 +44,6 @@ RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
         python3-pexpect \
         python3-pytest \
         qemu-system-arm \
-        qemu-system-misc \
         qemu-system-x86 \
         rsync \
         shellcheck \
